@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chaos-monkey-pod-deployment
+  namespace: devops-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chaos-monkey-pod
+  template:
+    metadata:
+      labels:
+        app: chaos-monkey-pod
+    spec:
+      serviceAccountName: chaos-monkey-pod-sa
+      containers:
+        - name: chaos-monkey-pod
+          image: kernelkappa/chaos-monkey-pod:1.2.0
+          resources:
+            limits:
+              memory: "1G"
+              cpu: "1000m"
+            requests:
+              memory: "512M"
+              cpu: "400m"
+
+          
+#          livenessProbe:
+#            httpGet:
+#              path: "/login"
+#              port: 8080
+#            initialDelaySeconds: 60
+#            periodSeconds: 10
+#            timeoutSeconds: 5
+#            failureThreshold: 1000
+#          readinessProbe:
+#            httpGet:
+#              path: "/login"
+#              port: 8080
+#            initialDelaySeconds: 90
+#            periodSeconds: 10
+#            timeoutSeconds: 5
+#            failureThreshold: 1000

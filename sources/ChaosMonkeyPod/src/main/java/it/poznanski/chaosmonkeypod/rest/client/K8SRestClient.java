@@ -1,9 +1,12 @@
 package it.poznanski.chaosmonkeypod.rest.client;
 
+import it.poznanski.chaosmonkeypod.utils.CommonUtils;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.ResponseProcessingException;
 import jakarta.ws.rs.core.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,12 +18,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class K8SRestClient {
+
+    private static Logger logger = LogManager.getLogger(K8SRestClient.class);
     private static Client client;
     private static final String apiServer = "https://kubernetes.default.svc";
     private static final String bearerTokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token";
     private static String bearerToken;
 
     public K8SRestClient() throws K8SRestClientException {
+        logger.info("Creating Kubernetes REST client");
         try {
             Path path = Paths.get(bearerTokenPath);
             bearerToken = Files.readAllLines(path).get(0);
@@ -32,6 +38,7 @@ public class K8SRestClient {
     }
 
     public ArrayList getPodsWithLabel(String namespace, String label) throws K8SRestClientException{
+        logger.info("Sending request for listing pod");
         String targetUri = new StringBuffer(apiServer)
                 .append("/api/v1/namespaces/")
                 .append(namespace)
@@ -46,32 +53,26 @@ public class K8SRestClient {
                     .header("Authorization", getAuthHeaderValue())
                     .get();
         }catch (ResponseProcessingException e){
-            throw new K8SRestClientException("Cannot process api response", e);
+            String msg = "Cannot process api response";
+            logger.error(msg, e);
+            throw new K8SRestClientException(msg, e);
         }
+        logger.info("Checking response code");
         checkStatusCode(response, targetUri);
+        logger.info("Parsing json pod list");
         String jsonText = response.readEntity(String.class);
-        JSONObject jsonObject;
-        ArrayList<String>pods = new ArrayList<String>();
-        try {
-            jsonObject = new JSONObject(jsonText);
-            JSONArray podsObjects = jsonObject.getJSONArray("items");
-            podsObjects.iterator().forEachRemaining(element -> {
-                ((JSONObject)element).keys().forEachRemaining(key -> {
-                    if(key == "name"){
-                        pods.add(((JSONObject)element).getString("name"));
-                    }
-                });
-            });
-        }catch (NullPointerException|JSONException e){
-            throw new K8SRestClientException("Cannot read pod list", e);
-        }
+        ArrayList<String> pods = CommonUtils.parsePodList(jsonText);
         if(pods.isEmpty()){
-            throw new K8SRestClientException("Pod list is empty");
+            String msg = "Pod list is empty";
+            K8SRestClientException e = new K8SRestClientException("Pod list is empty");
+            logger.error(msg, e);
+            throw new K8SRestClientException(msg, e);
         }
         return pods;
     }
 
     public void killPod(String podName, String namespace) throws K8SRestClientException{
+        logger.info("Sending request for killing pod");
         String targetUri = new StringBuffer(apiServer)
                 .append("/api/v1/namespaces/")
                 .append(namespace)
@@ -89,22 +90,27 @@ public class K8SRestClient {
         }catch (ResponseProcessingException e) {
             throw new K8SRestClientException("Cannot process api response", e);
         }
+        logger.info("Checking response code");
         checkStatusCode(response, targetUri);
     }
 
     private static void checkStatusCode(Response response, String targetUri) throws K8SRestClientException{
         boolean succeded = false;
         if(response.getStatus() >= 200  && response.getStatus() <300){
+            String msg = new StringBuffer("Response returned status code ").append(response.getStatus()).append(" which is in accepted range [200-299]").toString();
+            logger.info(msg);
             succeded = true;
         }
         if(!succeded){
             String msg = new StringBuffer("Error while calling uri")
                     .append(targetUri)
-                    .append(" with status code ")
-                    .append(response.getStatus())
+                    .append(", status code ")
+                    .append(response.getStatus()).append(" is not in accepted range [200-299]")
                     .append("\nServer response:\n")
                     .append(response.readEntity(String.class)).toString();
-            throw new K8SRestClientException(msg);
+            K8SRestClientException e = new K8SRestClientException(msg);
+            logger.info(msg, e);
+            throw e;
         }
     }
     private static String getAuthHeaderValue(){
