@@ -5,16 +5,18 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>it.poznanski.chaosmonkeypod</groupId>
-    <artifactId>${artifactId}</artifactId>
-    <version>${artifact.version}</version>
-    <packaging>jar</packaging>
     <properties>
         <artifactId>chaos-monkey-pod</artifactId>
         <artifact.version>1.0.0</artifact.version>
         <java.version>11</java.version>
         <junit.version>4.13.2</junit.version>
     </properties>
+
+    <groupId>it.poznanski.chaosmonkeypod</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${artifact.version}</version>
+    <packaging>jar</packaging>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/jakarta.ws.rs/jakarta.ws.rs-api -->
         <dependency>
@@ -84,8 +86,16 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <skipTests>false</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -108,6 +118,4 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             </plugin>
         </plugins>
     </build>
-
-
 </project>
