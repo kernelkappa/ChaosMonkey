@@ -101,7 +101,12 @@ kubectl get pod -n testing
 ``` 
 to check status of pods which will be randomly deleted by it.
 
-You're done!!
+### Configuration
+ChaosMonkeyPod uses three enviroment variables defined in chaos-monkey-pod-deployment.yaml manifest.
+ - TARGET_NAMESPACE: namespace where ChaosMonkeyPod searches for pods to delete 
+ - TARGET_LABEL: label used as filter for pods search 
+ - QUARTZ_CRON_EXPR: Quartz expression to schedule job execution
+These three values can be changed and applied only with a kubectl apply command for the ChaosMonkeyPod deployment without rebuilding and repackaging jar application and docker image.
 
 ## Contributing
 
