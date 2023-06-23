@@ -1,7 +1,7 @@
 #!/bin/bash
 JAR_VERSION="1.0.0"
 IMAGE_TAG="1.2.0"
-DOCKER_HUB_REGITRY="kernelkappa"
+REGISTRY="kernelkappa"
 DEVOPS_NAMESPACE="devops-tools"
 TARGET_NAMESPACE="testing"
 JAVA_SOURCE_PATH="../sources/ChaosMonkeyPod"

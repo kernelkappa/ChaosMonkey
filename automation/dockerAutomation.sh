@@ -15,16 +15,16 @@ if [[ ! $status -eq 0 ]]; then
   echo -e "\e[1m\e[31mERROR - Can't copy file ${JAVA_SOURCE_PATH}/target/chaos-monkey-pod-${JAR_VERSION}\e[0m"
   exit $status
 fi
-docker build . -t ${DOCKER_HUB_REGITRY}/chaos-monkey-pod:${IMAGE_TAG}
+docker build . -t ${REGISTRY}/chaos-monkey-pod:${IMAGE_TAG}
 status=$?
 if [[ ! $status -eq 0 ]]; then
-  echo -e "\e[1m\e[31mERROR - Can't build image ${DOCKER_HUB_REGITRY}/chaos-monkey-pod:${IMAGE_TAG}\e[0m"
+  echo -e "\e[1m\e[31mERROR - Can't build image ${REGISTRY}/chaos-monkey-pod:${IMAGE_TAG}\e[0m"
   exit $status
 fi
-docker push ${DOCKER_HUB_REGITRY}/chaos-monkey-pod:1.2.0
+docker push ${REGISTRY}/chaos-monkey-pod:${IMAGE_TAG}
 status=$?
 if [[ ! $status -eq 0 ]]; then
-  echo -e "\e[1m\e[31mERROR - Can't push image ${DOCKER_HUB_REGITRY}/chaos-monkey-pod:${IMAGE_TAG}\e[0m"
+  echo -e "\e[1m\e[31mERROR - Can't push image ${REGISTRY}/chaos-monkey-pod:${IMAGE_TAG}\e[0m"
   exit $status
 fi
 cd "../${AUTOMATION_SOURCE_DIR}"
