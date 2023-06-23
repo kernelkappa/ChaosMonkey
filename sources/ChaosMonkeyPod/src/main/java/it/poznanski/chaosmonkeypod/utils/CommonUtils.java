@@ -31,7 +31,7 @@ public class CommonUtils {
             logger.debug("POD LIST:\n"+(String.join(", ", pods)));
         }catch (NullPointerException | JSONException e){
             String msg = "Cannot read pod list";
-            logger.error(msg, e);
+            //logger.error(msg, e);
             throw new K8SRestClientException(msg, e);
         }
         return pods;

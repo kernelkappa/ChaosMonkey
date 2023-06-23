@@ -1,3 +1,5 @@
+package it.poznanski.chaosmonekypod.test;
+
 import it.poznanski.chaosmonkeypod.rest.client.K8SRestClientException;
 import it.poznanski.chaosmonkeypod.utils.CommonUtils;
 import org.junit.Before;

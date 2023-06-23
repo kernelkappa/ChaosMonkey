@@ -32,7 +32,9 @@ public class K8SRestClient {
             bearerToken = Files.readAllLines(path).get(0);
         }
         catch (IOException e){
-            throw new K8SRestClientException("Cannot read Kubernetes token", e);
+            String msg = "Cannot read Kubernetes token";
+            logger.error(msg);
+            throw new K8SRestClientException(msg, e);
         }
         this.client = ClientBuilder.newClient();
     }
@@ -54,7 +56,7 @@ public class K8SRestClient {
                     .get();
         }catch (ResponseProcessingException e){
             String msg = "Cannot process api response";
-            logger.error(msg, e);
+            //logger.error(msg, e);
             throw new K8SRestClientException(msg, e);
         }
         logger.info("Checking response code");
@@ -65,7 +67,7 @@ public class K8SRestClient {
         if(pods.isEmpty()){
             String msg = "Pod list is empty";
             K8SRestClientException e = new K8SRestClientException("Pod list is empty");
-            logger.error(msg, e);
+            //logger.error(msg, e);
             throw new K8SRestClientException(msg, e);
         }
         return pods;
