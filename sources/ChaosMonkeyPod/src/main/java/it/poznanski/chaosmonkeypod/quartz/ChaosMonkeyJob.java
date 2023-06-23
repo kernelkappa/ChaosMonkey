@@ -22,8 +22,8 @@ public class ChaosMonkeyJob implements Job {
         try{
             logger.info("Reading job properties");
             Properties properties = Properties.getInstance();
-            String namespace = properties.getProperties().getProperty("pod.namespace");
-            String label = properties.getProperties().getProperty("pod.label");
+            String namespace = properties.getProperties().getProperty("target.namespace");
+            String label = properties.getProperties().getProperty("target.label");
             logger.info("Creating client for Kubernetes");
             K8SRestClient client = new K8SRestClient();
             String msg = new StringBuffer("Getting pod list with label ")
