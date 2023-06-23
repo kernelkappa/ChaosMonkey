@@ -40,10 +40,4 @@ public class ChaosMonkeyPod {
             logger.error(msg, e);
         }
     }
-
-    //.withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
-    //                .forJob(jobKey)
-    //                            simpleSchedule()
-    //                            .withIntervalInSeconds(60)
-    //                            .repeatForever())
 }
