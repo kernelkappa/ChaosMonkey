@@ -39,6 +39,11 @@ public class K8SRestClient {
         this.client = ClientBuilder.newClient();
     }
 
+    public K8SRestClient(String bearerToken) throws K8SRestClientException {
+        logger.info("Creating Kubernetes REST client");
+        this.client = ClientBuilder.newClient();
+    }
+
     public ArrayList getPodsWithLabel(String namespace, String label) throws K8SRestClientException{
         logger.info("Sending request for listing pod");
         String targetUri = new StringBuffer(apiServer)

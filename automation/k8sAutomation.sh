@@ -41,7 +41,7 @@ if [[ $1 == "init" ]]; then
     exit $status
   fi
 elif [[ $1 == "redeploy" ]]; then
-  kubectl delete -f chaos-monkey-pod-deployment.yaml
+  kubectl delete -f chaos-monkey-pod-deployment.yaml || true
   status=$?
   if [[ ! $status -eq 0 ]]; then
     echo -e "\e[1m\e[31mERROR - Can't delete manifest chaos-monkey-pod-deployment.yaml\e[0m"

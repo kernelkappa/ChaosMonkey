@@ -10,6 +10,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <artifact.version>1.0.0</artifact.version>
         <java.version>11</java.version>
         <junit.version>4.13.2</junit.version>
+        <fabric8.version>6.7.2</fabric8.version>
     </properties>
 
     <groupId>it.poznanski.chaosmonkeypod</groupId>
@@ -72,7 +73,18 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-server-mock</artifactId>
+            <version>${fabric8.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-junit-jupiter</artifactId>
+            <version>${fabric8.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -29,7 +29,7 @@ public class ChaosMonkeyPod {
             CronTrigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity("ChaosMonkeyTrigger", "killers")
                     .startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule(properties.getProperties().getProperty("org.quartz.chron")))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
                     .build();
             logger.info("Configuring trigger for ChaosMonkey in scheduler");
             scheduler.scheduleJob(job, trigger);
@@ -41,3 +41,4 @@ public class ChaosMonkeyPod {
         }
     }
 }
+//properties.getProperties().getProperty("org.quartz.chron")

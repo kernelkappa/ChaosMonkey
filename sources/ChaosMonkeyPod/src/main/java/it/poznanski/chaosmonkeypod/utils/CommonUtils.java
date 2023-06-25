@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class CommonUtils {
     private static Logger logger = LogManager.getLogger(CommonUtils.class);
     public static ArrayList<String> parsePodList(String jsonText) throws K8SRestClientException {
+        logger.debug("POD LIST JSON: "+jsonText);
         ArrayList<String>pods = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(jsonText);
