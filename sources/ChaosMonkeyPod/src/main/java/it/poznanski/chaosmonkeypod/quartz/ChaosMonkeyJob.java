@@ -2,14 +2,12 @@ package it.poznanski.chaosmonkeypod.quartz;
 
 import it.poznanski.chaosmonkeypod.rest.client.K8SRestClient;
 import it.poznanski.chaosmonkeypod.rest.client.K8SRestClientException;
-import it.poznanski.chaosmonkeypod.utils.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,9 +19,8 @@ public class ChaosMonkeyJob implements Job {
 
         try{
             logger.info("Reading job properties");
-            Properties properties = Properties.getInstance();
-            String namespace = properties.getProperties().getProperty("target.namespace");
-            String label = properties.getProperties().getProperty("target.label");
+            String namespace = System.getenv().get("TARGET_NAMESPACE");
+            String label = System.getenv().get("TARGET_LABEL");
             logger.info("Creating client for Kubernetes");
             K8SRestClient client = new K8SRestClient();
             String msg = new StringBuffer("Getting pod list with label ")
@@ -47,7 +44,7 @@ public class ChaosMonkeyJob implements Job {
                 logger.error(msg);
             }
 
-        }catch(IOException | K8SRestClientException e){
+        }catch(K8SRestClientException e){
             String msg = "Error while executing ChaosMonkeyJob";
             logger.error(msg, e);
             throw new JobExecutionException(msg, e);

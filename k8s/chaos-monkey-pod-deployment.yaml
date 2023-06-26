@@ -19,11 +19,11 @@ spec:
           image: kernelkappa/chaos-monkey-pod:1.2.0
           env:
             - name: TARGET_NAMESPACE
-              value: testing
+              value: 'testing'
             - name: TARGET_LABEL
-              value: chaos-monkey%3Dmonkey-victim
+              value: 'chaos-monkey%3Dmonkey-victim'
             - name: QUARTZ_CRON_EXPR
-              value: 0 0/1 * * * ?
+              value: '0 0/1 * * * ?'
           resources:
             limits:
               memory: "1G"
